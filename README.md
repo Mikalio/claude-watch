@@ -27,7 +27,7 @@ handed you the turn, or has nothing to do.
 
 Also on the watch:
 
-- **Sessions:** tap the face for every session, its state, its agents and how long. On the Classic, turn the bezel to scroll.
+- **Sessions:** tap the face for every session, its state, its agents and how long. On a Classic, turn the bezel to scroll.
 - **Several at once:** the face counts them ("1 needs you · 2 working").
 - **A tile and a complication,** for when you'd rather keep another face.
 - **Always-on:** arm down, it dims and keeps still.
@@ -46,12 +46,21 @@ doesn't buzz: you look at it, and walk back when it asks.
 **What leaves your machine:** the state, the folder name of each session, and its agent count go through your own
 Firebase project to your watch. Your prompts and code don't.
 
-## Other watches
+## Which watches
 
-It's built and tested on a **Galaxy Watch4 Classic 46 mm** (450×450, Wear OS 6). Nothing else has been tested.
+It's made for the **Samsung Galaxy Watch4, Watch5, Watch6, Watch7 and Watch8**, including the Classic, Pro and Ultra models,
+on Wear OS 5 or newer. The screens are round and differ only in size, and the face, tile and Sessions screen are all drawn
+for 450 px and scaled to fit.
 
-- **Other round Wear OS watches** should be close: the face and app are drawn for 450 px and scale to the screen.
-- **Other watches** (Apple Watch, Garmin) need a new watch app, but the relay and hooks can stay as they are.
+**What's been tested:** so far it has only run on a Galaxy Watch4 Classic 46 mm. The other models should fit, because everything
+scales, but nobody has seen them yet. If something looks off on yours, please [open an issue](https://github.com/Mikalio/claude-watch/issues).
+
+On a Classic, the rotating bezel scrolls the Sessions screen. On the other models, swipe.
+
+### Another kind of watch?
+
+- **Other round Wear OS watches** should be close, for the same reason.
+- **Apple Watch, Garmin and others** need a new watch app, but the relay and hooks can stay as they are.
 
 Either way, Claude can do the work. Open this repo in Claude Code and tell it what you have:
 

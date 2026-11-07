@@ -137,7 +137,7 @@ const OverWatch2: React.FC<{frame: number}> = ({frame}) => (
     <Words text="It keeps count." frame={frame} from={B(19.5)} to={B(20.42)} x={112} y={488} size={84} colour={COLOURS[NEEDS]} width={900} />
     <Words text="Tap for every session." frame={frame} from={B(20.6)} to={B(21.42)} x={112} y={400} size={84} width={640} />
     <Words text="Turn the bezel to scroll." frame={frame} from={B(21.6)} to={B(23)} x={112} y={390} size={84} width={760} />
-    <Words text="Built for the Classic." frame={frame} from={B(22.25)} to={B(23)} x={112} y={590} size={56} weight={500} colour={Grey} width={760} />
+    <Words text="On a Classic, it really turns." frame={frame} from={B(22.25)} to={B(23)} x={112} y={590} size={56} weight={500} colour={Grey} width={760} />
 
     <Words text="No news for 40 minutes?" frame={frame} from={B(S.stale) + 6} to={B(25)} x={112} y={370} size={84} width={720} colour={COLOURS[STALE]} />
     <Words text="It says so." frame={frame} from={B(23.7)} to={B(25)} x={112} y={572} size={84} width={720} />
@@ -236,7 +236,7 @@ const Outro: React.FC<{frame: number}> = ({frame}) => {
         {family.map((m, i) => <Burst key={i} frame={frame} from={Math.round(start + m.from * beat + 11)} x={m.x + 90} y={ground} colours={[m.dust, WHITE]} count={10} reach={120} size={10} seed={i + 2} life={20} />)}
       </AbsoluteFill>
       <Wordmark frame={frame} from={B(29.5)} x={0} y={130} size={168} align="center" width={1920} />
-      <Words text="Get it for your Galaxy Watch." frame={frame} from={B(30.25)} x={0} y={322} size={60} weight={500} colour={Grey} align="center" width={1920} stagger={2} />
+      <Words text="Get it for your Galaxy Watch4 to Watch8." frame={frame} from={B(30.25)} x={0} y={322} size={60} weight={500} colour={Grey} align="center" width={1920} stagger={2} />
       {frame >= B(30.75) && (
         <div style={{position: 'absolute', left: 0, right: 0, top: 418, textAlign: 'center', opacity: clamp01((frame - B(30.75)) / 8), transform: `scale(${easeOutBack((frame - B(30.75)) / 14, 1.2)})`}}>
           <span style={{display: 'inline-block', fontFamily: MONO, fontWeight: 700, fontSize: 56, color: '#06070C', background: COLOURS[DONE], padding: '14px 34px', borderRadius: 18}}>github.com/Mikalio/claude-watch</span>
