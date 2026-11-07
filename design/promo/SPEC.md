@@ -1,4 +1,4 @@
-# Claude watch promo: design spec
+# Wristling promo: design spec
 
 **Goal.** Someone with a Galaxy Watch4 Classic who uses Claude Code watches this and wants it.
 **Format.** 1920x1080, 30 fps, about 63 s, full animation. Two versions: with music, and sound effects only.
@@ -18,7 +18,7 @@ Cat Walk (Arulo, Mixkit free licence). 130 bpm, 13.85 frames per beat, a bar is 
 |---|---|---|---|---|
 | 1 | 0-3 | Terminal permission prompt, cursor blinking | Slow push, timer races to 23:41 | Claude asked you something. / 23 minutes ago. |
 | 2 | 3-5 | Black | Words, then an amber ring draws itself | You were making coffee. |
-| 3 | 5-8 | Ring becomes the watch: the drop | Watch lights up, pulls back, wordmark stamps | CLAUDE WATCH / what it is |
+| 3 | 5-8 | Ring becomes the watch: the drop | Watch lights up, pulls back, wordmark stamps | WRISTLING / what it is |
 | 4 | 8-11 | Dive through the screen | Hammer full frame on the beat, then pull out | Claude's working. So is it. / Which session. How many agents. |
 | 5 | 11-14 | Terminal and watch side by side | Hops until you press 1; timer stops | Claude needs you. / 41 seconds. Not 23 minutes. |
 | 6 | 14-16 | Green iris, creature leaps out full size | Dance on the beat | All done. Your turn. |
@@ -27,7 +27,7 @@ Cat Walk (Arulo, Mixkit free licence). 130 bpm, 13.85 frames per beat, a bar is 
 | 9 | 23-25 | Colour drains, dashed ring | Desaturate | No news for 40 minutes? It says so. |
 | 10 | 25-26 | Lights down, always-on looks | Four dim looks on the beat | Arm down, it dims and keeps still. |
 | 11 | 26-28 | Hook to relay to push to watch | A packet travels the line | Your hooks. Your relay. Your watch. / Pushes are kept few, to save your watch's battery. |
-| 12 | 28-34 | Family photo around the wordmark: the peak | Every state lands on the beat | CLAUDE WATCH / github.com/Mikalio/claude-watch |
+| 12 | 28-34 | Family photo around the wordmark: the peak | Every state lands on the beat | WRISTLING / github.com/Mikalio/wristling |
 
 ## Recipes used
 circle-match-iris (ring-to-ring wipes, concentric), blur-slide (words), brand-ink-open (letters stamped),

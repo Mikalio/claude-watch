@@ -1,14 +1,17 @@
-"""Writes the Claude watch face (Watch Face Format): its images and res/raw/watchface.xml, from the
+"""Writes the Wristling watch face (Watch Face Format): its images and res/raw/watchface.xml, from the
 same pixel maps as the tile (tools/sprites.py), laid out for a 450 px screen.
 Run it after changing either: python tools/face.py
 
-The face is resource-only, so everything that changes comes from the Claude complication (the app's
+The face is resource-only, so everything that changes comes from the Wristling complication (the app's
 StatusComplicationService): its value is the state as a number (0 sleeping, 1 working, 2 needs you,
 3 your turn, 4 out of date), its text the line below the word, and its title the count per state
 when several sessions are active. The home shows the day from 06:00 to 18:00. Movement comes from
 expressions on the time, since the face has no code: the sleeper's breath and the worker's blows fit
 the minute evenly, so they don't skip when it turns over.
 The watch's own battery is a short gauge inside the bottom of the ring, with the percent above it.
+
+The design is drawn for a 450 px screen. On any other, the system would scale it and each block's edge would land
+between two screen pixels, so the face is written once per round Galaxy Watch size, with every block on whole pixels.
 """
 
 import struct
@@ -20,6 +23,24 @@ import sprites
 RES = Path(__file__).resolve().parent.parent / "watch" / "face" / "src" / "main" / "res"
 MOODS = ["sleeping", "working", "needs", "done", "stale"]  # in the order of their numbers
 GROUND = 275  # the grass on the face, lower than on the tile: the clock and date sit above
+SIZES = [396, 432, 438, 480]  # the other round Galaxy Watch screens, in px; each gets files named _396 and so on
+size = 450  # the screen being written
+placed = {}  # each image's spot in the design, as the face being written uses it
+
+
+def at(v):
+    """A position or length in the design, in this screen's whole pixels."""
+    return int(v * size / 450 + 0.5)
+
+
+def amount(v):
+    """How far something moves in the design, on this screen."""
+    return f"{v * size / 450:.5g}"
+
+
+def named(resource):
+    return resource if size == 450 else f"{resource}_{size}"
+
 
 STATES = {  # word, its colour, its dimmed colour for always-on, the ring's colour
     "sleeping": ("Sleeping", "#A9A4F5", "#7D79BA", "#2E2C4A"),
@@ -89,6 +110,19 @@ class Canvas:
                 j = (yy * other.w + xx) * 4
                 if other.px[j + 3]:
                     self.rect(x + xx, y + yy, 1, 1, tuple(other.px[j:j + 4]))
+
+    def on_screen(self, x, y):
+        """This picture, which sits at x, y in the design, on this screen. Each pixel takes the colour under its
+        centre, so blocks stay one colour and all the pictures on the face share one grid of whole pixels."""
+        left, top = at(x), at(y)
+        out = Canvas(at(x + self.w) - left, at(y + self.h) - top)
+        for yy in range(out.h):
+            row = min(self.h - 1, max(0, int((top + yy + 0.5) * 450 / size) - y))
+            for xx in range(out.w):
+                column = min(self.w - 1, max(0, int((left + xx + 0.5) * 450 / size) - x))
+                j, i = (row * self.w + column) * 4, (yy * out.w + xx) * 4
+                out.px[i:i + 4] = self.px[j:j + 4]
+        return out
 
     def save(self, path):
         raw = b"".join(b"\x00" + bytes(self.px[y * self.w * 4:(y + 1) * self.w * 4]) for y in range(self.h))
@@ -181,7 +215,6 @@ SLEEP_ICON_X, SLEEP_ICON_Y = 346, 150  # clear of the hats
 WORK_ICON_X, WORK_ICON_Y = 358, 156  # the hammer swings through the usual spot
 HAMMER_TOP = -78  # degrees, raised
 S = f"({T} % 1)"  # how far into this second: the hammer lands on each one
-JUMP = f"8.4 * sin(3.14159 * clamp({S} / 0.19, 0, 1))"  # the worker's small jump as it lands
 
 # Each line of words keeps at least 12 px from the ring; a longer text ends in dots
 WORD_X, WORD_W = 55, 340
@@ -192,7 +225,7 @@ COUNTS_X, COUNTS_W = 106, 238
 def sleeper(hat):
     """In its sun hat by day and its nightcap at night, with hat and head rising and falling: one breath every 4 s."""
     top_y = GROUND - 105
-    breath = f'<Transform target="y" value="{top_y} - 4.375 * (1 - cos({T} * 1.5708))"/>'
+    breath = f'<Transform target="y" value="{at(top_y)} - {amount(4.375)} * (1 - cos({T} * 1.5708))"/>'
     return [image(f"sleep_top_{hat}", SLEEPER_X, top_y, 140, 91, [breath]),
             image("sleep_low", SLEEPER_X, GROUND - 35, 140, 35)]
 
@@ -211,7 +244,8 @@ def worker():
     angle = f"{HAMMER_TOP} * {raised} * {raised} * (3 - 2 * {raised}) * (1 - {strike} * {strike}) - {rebound}"
     near = f"round(255 * clamp((0.08 - {S}) * 1000, 0, 1))"
     far = f"round(255 * clamp(({S} - 0.08) * 1000, 0, 1) * clamp((0.2 - {S}) * 1000, 0, 1))"
-    jump = f'<Transform target="y" value="{y} - {JUMP}"/>'
+    # the worker's small jump as it lands
+    jump = f'<Transform target="y" value="{at(y)} - {amount(8.4)} * sin(3.14159 * clamp({S} / 0.19, 0, 1))"/>'
     return [image("anvil", WORKER_X + 105, GROUND - 21, 63, 21),
             image("sparks_near", WORKER_X + 98, GROUND - 77, 98, 56, [f'<Transform target="alpha" value="{near}"/>']),
             image("sparks", WORKER_X + 98, GROUND - 77, 98, 56, [f'<Transform target="alpha" value="{far}"/>']),
@@ -223,10 +257,10 @@ def worker():
 def creature_moves(mood):
     """The creature hops when it needs you and dances on your turn: sways, bobs and tilts."""
     if mood == "needs":
-        return [f'<Transform target="y" value="{CREATURE_Y} - 28 * abs(sin({T} * 4.76))"/>']
+        return [f'<Transform target="y" value="{at(CREATURE_Y)} - {amount(28)} * abs(sin({T} * 4.76))"/>']
     if mood == "done":
-        return [f'<Transform target="x" value="{CREATURE_X} + 7 * sin({T} * 7.14)"/>',
-                f'<Transform target="y" value="{CREATURE_Y} - 7 * abs(sin({T} * 7.14))"/>',
+        return [f'<Transform target="x" value="{at(CREATURE_X)} + {amount(7)} * sin({T} * 7.14)"/>',
+                f'<Transform target="y" value="{at(CREATURE_Y)} - {amount(7)} * abs(sin({T} * 7.14))"/>',
                 f'<Transform target="angle" value="6 * sin({T} * 7.14)"/>']
     return []
 
@@ -234,44 +268,47 @@ def creature_moves(mood):
 def icon_moves(mood):
     """The bubble bounces, the spinner turns, the Zs float, the sparkles twinkle."""
     return {
-        "needs": [f'<Transform target="y" value="{ICON_Y} - 5 * abs(sin({T} * 3.93))"/>'],
+        "needs": [f'<Transform target="y" value="{at(ICON_Y)} - {amount(5)} * abs(sin({T} * 3.93))"/>'],
         "working": [f'<Transform target="angle" value="({T} * 562.5) % 360"/>'],
-        "sleeping": [f'<Transform target="y" value="{SLEEP_ICON_Y} - 5 * abs(sin({T} * 1.57))"/>'],
+        "sleeping": [f'<Transform target="y" value="{at(SLEEP_ICON_Y)} - {amount(5)} * abs(sin({T} * 1.57))"/>'],
         "done": [f'<Transform target="alpha" value="round(155 + 100 * abs(sin({T} * 3.5)))"/>'],
     }.get(mood, [])
 
 
 def image(resource, x, y, w, h, moves=(), pivot=""):
     inner = "".join(moves)
-    return f'<PartImage x="{x}" y="{y}" width="{w}" height="{h}"{pivot}><Image resource="{resource}"/>{inner}</PartImage>'
+    placed[resource] = (x, y)
+    return (f'<PartImage x="{at(x)}" y="{at(y)}" width="{at(x + w) - at(x)}" height="{at(y + h) - at(y)}"{pivot}>'
+            f'<Image resource="{named(resource)}"/>{inner}</PartImage>')
 
 
-def text(x, y, w, h, size, colour, template, params=(), bold=False):
+def text(x, y, w, h, font, colour, template, params=(), bold=False):
     """A centred line. A template needs at least one parameter, so fixed words become a quoted one."""
     if not params:
         template, params = "%s", (f"&quot;{template}&quot;",)
     weight = ' weight="BOLD"' if bold else ""
     p = "".join(f'<Parameter expression="{e}"/>' for e in params)
-    return (f'<PartText x="{x}" y="{y}" width="{w}" height="{h}"><Text align="CENTER" ellipsis="TRUE">'
-            f'<Font family="SYNC_TO_DEVICE" size="{size}" color="{colour}"{weight}>'
+    return (f'<PartText x="{at(x)}" y="{at(y)}" width="{at(x + w) - at(x)}" height="{at(y + h) - at(y)}"><Text align="CENTER" ellipsis="TRUE">'
+            f'<Font family="SYNC_TO_DEVICE" size="{at(font)}" color="{colour}"{weight}>'
             f'<Template>{template}{p}</Template></Font></Text></PartText>')
 
 
 def ring(mood):
-    dashes = ' dashIntervals="12 12"' if mood == "stale" else ""
-    return (f'<PartDraw x="0" y="0" width="450" height="450"><Ellipse x="9" y="9" width="432" height="432">'
-            f'<Stroke color="{STATES[mood][3]}" thickness="6"{dashes}/></Ellipse></PartDraw>')
+    dashes = f' dashIntervals="{at(12)} {at(12)}"' if mood == "stale" else ""
+    inside = size - 2 * at(9)
+    return (f'<PartDraw x="0" y="0" width="{size}" height="{size}"><Ellipse x="{at(9)}" y="{at(9)}" width="{inside}" height="{inside}">'
+            f'<Stroke color="{STATES[mood][3]}" thickness="{at(6)}"{dashes}/></Ellipse></PartDraw>')
 
 
 def gauge_arc(colour, level=None):
     """The battery gauge's track, or with a level (0 to 100) the part of it that is filled."""
-    half, d = BATTERY_SPAN // 2, 2 * BATTERY_R
+    half, d = BATTERY_SPAN // 2, 2 * at(BATTERY_R)
     # An arc runs clockwise, which is right to left at the bottom: the left end stays and the start moves
     right, left = 180 - half, 180 + half
     fill = (f'<Transform target="startAngle" value="{left} - {BATTERY_SPAN} * clamp({level}, 0, 100) / 100"/>'
             if level else "")
-    return (f'<PartDraw x="0" y="0" width="450" height="450"><Arc centerX="225" centerY="225" width="{d}" '
-            f'height="{d}" startAngle="{right}" endAngle="{left}"><Stroke color="{colour}" thickness="6"/>{fill}'
+    return (f'<PartDraw x="0" y="0" width="{size}" height="{size}"><Arc centerX="{size // 2}" centerY="{size // 2}" width="{d}" '
+            f'height="{d}" startAngle="{right}" endAngle="{left}"><Stroke color="{colour}" thickness="{at(6)}"/>{fill}'
             f'</Arc></PartDraw>')
 
 
@@ -347,69 +384,69 @@ def watchface():
     chars = list(DIGITS)
     fonts = "".join(
         f'<BitmapFont name="{font}">'
-        + "".join(f'<Character name="{c}" resource="{prefix}{name(c)}" width="{(len(DIGITS[c][0]) + 1) * DIGIT_PX}" '
-                  f'height="{7 * DIGIT_PX}"/>' for c in chars)
+        + "".join(f'<Character name="{c}" resource="{named(prefix + name(c))}" width="{at((len(DIGITS[c][0]) + 1) * DIGIT_PX)}" '
+                  f'height="{at(7 * DIGIT_PX)}"/>' for c in chars)
         + "</BitmapFont>"
         for font, prefix in (("pixel", "digit_"), ("pixel_dim", "digit_dim_")))
     return f"""<?xml version="1.0" encoding="utf-8"?>
 <!-- Written by tools/face.py; change it there, not here. -->
-<WatchFace width="450" height="450">
+<WatchFace width="{size}" height="{size}">
   <Metadata key="CLOCK_TYPE" value="DIGITAL"/>
   <Metadata key="PREVIEW_TIME" value="10:08:32"/>
   <BitmapFonts>{fonts}</BitmapFonts>
   <Scene backgroundColor="#FF000000">
-    <ComplicationSlot slotId="0" x="0" y="0" width="450" height="450" displayName="claude_slot" supportedTypes="RANGED_VALUE EMPTY" isCustomizable="TRUE">
-      <DefaultProviderPolicy defaultSystemProvider="EMPTY" defaultSystemProviderType="EMPTY" primaryProvider="io.github.mikalio.claudewatch/io.github.mikalio.claudewatch.StatusComplicationService" primaryProviderType="RANGED_VALUE"/>
-      <BoundingOval x="0" y="0" width="450" height="450"/>
+    <ComplicationSlot slotId="0" x="0" y="0" width="{size}" height="{size}" displayName="claude_slot" supportedTypes="RANGED_VALUE EMPTY" isCustomizable="TRUE">
+      <DefaultProviderPolicy defaultSystemProvider="EMPTY" defaultSystemProviderType="EMPTY" primaryProvider="io.github.mikalio.wristling/io.github.mikalio.wristling.StatusComplicationService" primaryProviderType="RANGED_VALUE"/>
+      <BoundingOval x="0" y="0" width="{size}" height="{size}"/>
       <Complication type="RANGED_VALUE">
-        <Group name="lit" x="0" y="0" width="450" height="450">
+        <Group name="lit" x="0" y="0" width="{size}" height="{size}">
           <Variant mode="AMBIENT" target="alpha" value="0"/>
           {scenes}
           {lit}
           {text(DETAIL_X, 333, DETAIL_W, 28, 22, "#F5F6F8", "%s", detail)}
           {text(COUNTS_X, 361, COUNTS_W, 26, 20, "#D5D8DF", "%s", counts)}
         </Group>
-        <Group name="dim" x="0" y="0" width="450" height="450" alpha="0">
+        <Group name="dim" x="0" y="0" width="{size}" height="{size}" alpha="0">
           <Variant mode="AMBIENT" target="alpha" value="255"/>
-          <PartDraw x="67" y="{GROUND}" width="316" height="3"><Rectangle x="0" y="0" width="316" height="3"><Fill color="#2A2D33"/></Rectangle></PartDraw>
+          <PartDraw x="{at(67)}" y="{at(GROUND)}" width="{size - 2 * at(67)}" height="{at(3)}"><Rectangle x="0" y="0" width="{size - 2 * at(67)}" height="{at(3)}"><Fill color="#2A2D33"/></Rectangle></PartDraw>
           {dimmed}
           {text(DETAIL_X, 333, DETAIL_W, 28, 22, "#8A9099", "%s", detail)}
         </Group>
       </Complication>
       <Complication type="EMPTY">
-        <Group name="setup" x="0" y="0" width="450" height="450">
+        <Group name="setup" x="0" y="0" width="{size}" height="{size}">
           <Variant mode="AMBIENT" target="alpha" value="0"/>
           {empty_scene}
           {text(WORD_X, 291, WORD_W, 40, 30, "#F5F6F8", "Not connected", bold=True)}
-          {text(DETAIL_X, 333, DETAIL_W, 28, 20, "#B9BEC8", "Hold the face, choose Claude")}
+          {text(DETAIL_X, 333, DETAIL_W, 28, 20, "#B9BEC8", "Hold the face, pick Wristling")}
         </Group>
       </Complication>
     </ComplicationSlot>
-    <DigitalClock x="75" y="67" width="300" height="56">
-      <TimeText format="hh:mm" hourFormat="24" align="CENTER" x="0" y="0" width="300" height="56">
+    <DigitalClock x="{at(75)}" y="{at(67)}" width="{size - 2 * at(75)}" height="{at(56)}">
+      <TimeText format="hh:mm" hourFormat="24" align="CENTER" x="0" y="0" width="{size - 2 * at(75)}" height="{at(56)}">
         <Variant mode="AMBIENT" target="alpha" value="0"/>
-        <BitmapFont family="pixel" size="56"/>
+        <BitmapFont family="pixel" size="{at(56)}"/>
       </TimeText>
     </DigitalClock>
-    <DigitalClock x="75" y="67" width="300" height="56">
-      <TimeText format="hh:mm" hourFormat="24" align="CENTER" x="0" y="0" width="300" height="56" alpha="0">
+    <DigitalClock x="{at(75)}" y="{at(67)}" width="{size - 2 * at(75)}" height="{at(56)}">
+      <TimeText format="hh:mm" hourFormat="24" align="CENTER" x="0" y="0" width="{size - 2 * at(75)}" height="{at(56)}" alpha="0">
         <Variant mode="AMBIENT" target="alpha" value="255"/>
-        <BitmapFont family="pixel_dim" size="56"/>
+        <BitmapFont family="pixel_dim" size="{at(56)}"/>
       </TimeText>
     </DigitalClock>
-    <Group name="date" x="0" y="0" width="450" height="450">
+    <Group name="date" x="0" y="0" width="{size}" height="{size}">
       <Variant mode="AMBIENT" target="alpha" value="0"/>
       {text(75, 127, 300, 24, 22, "#B9BEC8", "%s %s %s", ("[DAY_OF_WEEK_S]", "[DAY]", "[MONTH_S]"))}
     </Group>
-    <Group name="date_dim" x="0" y="0" width="450" height="450" alpha="0">
+    <Group name="date_dim" x="0" y="0" width="{size}" height="{size}" alpha="0">
       <Variant mode="AMBIENT" target="alpha" value="255"/>
       {text(75, 127, 300, 24, 22, "#7C828D", "%s %s %s", ("[DAY_OF_WEEK_S]", "[DAY]", "[MONTH_S]"))}
     </Group>
-    <Group name="battery" x="0" y="0" width="450" height="450">
+    <Group name="battery" x="0" y="0" width="{size}" height="{size}">
       <Variant mode="AMBIENT" target="alpha" value="0"/>
       {battery("lit")}
     </Group>
-    <Group name="battery_dim" x="0" y="0" width="450" height="450" alpha="0">
+    <Group name="battery_dim" x="0" y="0" width="{size}" height="{size}" alpha="0">
       <Variant mode="AMBIENT" target="alpha" value="255"/>
       {battery("dim")}
     </Group>
@@ -418,28 +455,52 @@ def watchface():
 """
 
 
-def main():
-    drawable = RES / "drawable"
-    drawable.mkdir(parents=True, exist_ok=True)
+def pictures():
+    """Every picture of the face, as drawn for 450 px, by name."""
+    art = {}
     for mood in MOODS:
-        scene(mood, day=False).save(drawable / f"scene_{mood}_night.png")
-        scene(mood, day=True).save(drawable / f"scene_{mood}_day.png")
-        icon(mood).save(drawable / f"icon_{mood}.png")
+        art[f"scene_{mood}_night"] = scene(mood, day=False)
+        art[f"scene_{mood}_day"] = scene(mood, day=True)
+        art[f"icon_{mood}"] = icon(mood)
     for mood in sprites.FACES:
-        creature(mood).save(drawable / f"creature_{mood}.png")
-        creature(mood, dimmed=True).save(drawable / f"creature_{mood}_dim.png")
+        art[f"creature_{mood}"] = creature(mood)
+        art[f"creature_{mood}_dim"] = creature(mood, dimmed=True)
     for picture, shape in {**sprites.PARTS, **sprites.FACE_PARTS}.items():
         if picture != "working_rest":
-            part(*shape).save(drawable / f"{picture}.png")
+            art[picture] = part(*shape)
     for hat in ("day", "night"):
-        part(*sprites.PARTS[f"creature_sleeping_{hat}"], dimmed=True).save(drawable / f"creature_sleeping_{hat}_dim.png")
-    part(*sprites.FACE_PARTS["working_rest"], dimmed=True).save(drawable / "working_rest_dim.png")
+        art[f"creature_sleeping_{hat}_dim"] = part(*sprites.PARTS[f"creature_sleeping_{hat}"], dimmed=True)
+    art["working_rest_dim"] = part(*sprites.FACE_PARTS["working_rest"], dimmed=True)
     for char in DIGITS:
-        digit(char, "#F5F6F8").save(drawable / f"digit_{name(char)}.png")
-        digit(char, "#C8CCD4").save(drawable / f"digit_dim_{name(char)}.png")
+        art[f"digit_{name(char)}"] = digit(char, "#F5F6F8")
+        art[f"digit_dim_{name(char)}"] = digit(char, "#C8CCD4")
+    return art
+
+
+def main():
+    global size
+    drawable, raw = RES / "drawable", RES / "raw"
+    drawable.mkdir(parents=True, exist_ok=True)
+    raw.mkdir(exist_ok=True)
+    (RES / "xml").mkdir(exist_ok=True)
+    art = pictures()
+    for picture, canvas in art.items():
+        canvas.save(drawable / f"{picture}.png")
     preview().save(drawable / "preview.png")
-    (RES / "raw").mkdir(exist_ok=True)
-    (RES / "raw" / "watchface.xml").write_text(watchface(), encoding="utf-8")
+    (raw / "watchface.xml").write_text(watchface(), encoding="utf-8")
+
+    for size in SIZES:
+        placed.clear()
+        (raw / f"watchface_{size}.xml").write_text(watchface(), encoding="utf-8")
+        digits = {picture: (0, 0) for picture in art if picture.startswith("digit_")}
+        for picture, (x, y) in {**digits, **placed}.items():
+            art[picture].on_screen(x, y).save(drawable / f"{named(picture)}.png")
+    size = 450
+
+    shapes = "".join(f'    <WatchFace shape="CIRCLE" width="{s}" height="{s}" file="@raw/watchface{"" if s == 450 else f"_{s}"}"/>\n'
+                     for s in sorted([*SIZES, 450]))
+    (RES / "xml" / "watch_face_shapes.xml").write_text(
+        f'<?xml version="1.0" encoding="utf-8"?>\n<!-- Written by tools/face.py -->\n<WatchFaces>\n{shapes}</WatchFaces>\n', encoding="utf-8")
     print(f"wrote the face to {RES}")
 
 

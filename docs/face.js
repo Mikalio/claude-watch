@@ -1,4 +1,4 @@
-// Draws the Claude face from its own watchface.xml and PNGs, so the film shows what the watch runs: the
+// Draws the Wristling face from its own watchface.xml and PNGs, so the film shows what the watch runs: the
 // same Conditions pick the scene and pose, and the same expressions move them. Also draws the Sessions
 // screen, laid out as MainActivity.kt lays it out.
 

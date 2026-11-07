@@ -5,17 +5,19 @@ plugins {
 }
 
 android {
-    namespace = "io.github.mikalio.claudewatch"
+    namespace = "io.github.mikalio.wristling"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "io.github.mikalio.claudewatch"
+        applicationId = "io.github.mikalio.wristling"
         minSdk = 30 // Wear OS 3, the oldest the Galaxy Watch 4 shipped with
         targetSdk = 34
         versionCode = 1
         versionName = "0.1"
         // The relay sends to this Firebase topic: the same value as FCM_TOPIC on your relay (see gradle.properties)
-        buildConfigField("String", "FCM_TOPIC", "\"${project.findProperty("claudeWatchTopic")}\"")
+        buildConfigField("String", "FCM_TOPIC", "\"${project.findProperty("wristlingTopic")}\"")
+        // The same as PUSH_KEY on the relay, to read sealed pushes. Empty: only plain pushes can be read
+        buildConfigField("String", "PUSH_KEY", "\"${project.findProperty("wristlingPushKey") ?: ""}\"")
     }
 
     signingConfigs {
@@ -52,4 +54,5 @@ dependencies {
     implementation("androidx.wear.protolayout:protolayout-expression:1.2.1")
     implementation("androidx.wear.watchface:watchface-complications-data-source-ktx:1.2.1")
     implementation("com.google.guava:guava:33.3.1-android")
+    testImplementation("junit:junit:4.13.2")
 }

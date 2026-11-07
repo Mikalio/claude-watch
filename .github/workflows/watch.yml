@@ -1,9 +1,9 @@
-# The watch app and the Claude watch face: check the face against Google's Watch Face Format validator
+# The watch app and the Wristling watch face: check the face against Google's Watch Face Format validator
 # and build both debug APKs.
 #
 # Without a GOOGLE_SERVICES_JSON secret this only proves the code builds, using the fake Firebase config in
 # google-services.example.json, and keeps no APK. With the secret, in your own PRIVATE copy of this repo, it
-# builds your real app and keeps it as a download (Actions, the run, Artifacts, claude-watch-debug).
+# builds your real app and keeps it as a download (Actions, the run, Artifacts, wristling-debug).
 #
 # Never add your secret to a public repo: anyone signed in to GitHub could then download an APK holding your
 # Firebase config and topic, and read your pushes.
@@ -37,7 +37,9 @@ jobs:
         run: |
           curl -sSfL -o "$RUNNER_TEMP/wff-validator.jar" https://github.com/google/watchface/releases/download/release/wff-validator.jar
           # the validator exits 0 even when the face is invalid, so read its verdict
-          java -jar "$RUNNER_TEMP/wff-validator.jar" 2 watch/face/src/main/res/raw/watchface.xml 2>&1 | tee "$RUNNER_TEMP/wff.log"
+          for face in watch/face/src/main/res/raw/watchface*.xml; do
+            java -jar "$RUNNER_TEMP/wff-validator.jar" 2 "$face" 2>&1 | tee -a "$RUNNER_TEMP/wff.log"
+          done
           ! grep -q "NOT valid" "$RUNNER_TEMP/wff.log"
 
       - uses: gradle/actions/setup-gradle@v4
@@ -48,6 +50,7 @@ jobs:
         env:
           GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
           FCM_TOPIC: ${{ secrets.FCM_TOPIC }}
+          PUSH_KEY: ${{ secrets.PUSH_KEY }}
         run: |
           if [ -n "$GOOGLE_SERVICES_JSON" ]; then
             printf '%s' "$GOOGLE_SERVICES_JSON" > watch/app/google-services.json
@@ -56,16 +59,19 @@ jobs:
             cp watch/app/google-services.example.json watch/app/google-services.json
           fi
           if [ -n "$FCM_TOPIC" ]; then
-            echo "ORG_GRADLE_PROJECT_claudeWatchTopic=$FCM_TOPIC" >> "$GITHUB_ENV"
+            echo "ORG_GRADLE_PROJECT_wristlingTopic=$FCM_TOPIC" >> "$GITHUB_ENV"
+          fi
+          if [ -n "$PUSH_KEY" ]; then
+            echo "ORG_GRADLE_PROJECT_wristlingPushKey=$PUSH_KEY" >> "$GITHUB_ENV"
           fi
 
-      - name: Build
+      - name: Test and build
         working-directory: watch
-        run: gradle assembleDebug --no-daemon
+        run: gradle testDebugUnitTest assembleDebug --no-daemon
 
       - uses: actions/upload-artifact@v4
         if: env.REAL_BUILD == 'true' && github.event.repository.private
         with:
-          name: claude-watch-debug
+          name: wristling-debug
           path: watch/*/build/outputs/apk/debug/*.apk
           retention-days: 14

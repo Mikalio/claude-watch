@@ -1,15 +1,15 @@
-// The Claude watch face, in Watch Face Format: resources only, no code. Its images and
+// The Wristling watch face, in Watch Face Format: resources only, no code. Its images and
 // res/raw/watchface.xml are written by tools/face.py. See README.md.
 plugins {
     id("com.android.application")
 }
 
 android {
-    namespace = "io.github.mikalio.claudewatch.face"
+    namespace = "io.github.mikalio.wristling.face"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "io.github.mikalio.claudewatch.face"
+        applicationId = "io.github.mikalio.wristling.face"
         // Watch Face Format version 2 needs Wear OS 5 (API 34)
         minSdk = 34
         targetSdk = 34

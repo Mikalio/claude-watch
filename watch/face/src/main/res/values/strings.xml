@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="face_name">Claude</string>
-    <string name="claude_slot">Claude</string>
+    <string name="face_name">Wristling</string>
+    <string name="claude_slot">Wristling</string>
 </resources>

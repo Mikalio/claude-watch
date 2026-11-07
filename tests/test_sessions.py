@@ -220,6 +220,6 @@ def test_project_name_stays_when_the_working_folder_moves():
 
 
 def test_project_name_from_any_path():
-    assert project_name("C:\\Users\\me\\Desktop\\Code programs\\Claude watch") == "Claude watch"
+    assert project_name("C:\\Users\\me\\Desktop\\Code programs\\Wristling") == "Wristling"
     assert project_name("/home/user/repo/") == "repo"
     assert project_name("") == ""

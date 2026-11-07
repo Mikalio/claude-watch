@@ -14,5 +14,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "claude-watch"
+rootProject.name = "wristling"
 include(":app", ":face")

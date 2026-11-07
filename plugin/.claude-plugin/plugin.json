@@ -1,0 +1,11 @@
+{
+  "name": "wristling",
+  "version": "0.1.0",
+  "displayName": "Wristling",
+  "description": "Reports your Claude Code sessions to the Wristling relay on this PC, which shows them on your Galaxy Watch. Set it up with python -m wristling setup.",
+  "author": {
+    "name": "Mikalio"
+  },
+  "repository": "https://github.com/Mikalio/wristling",
+  "license": "MIT"
+}

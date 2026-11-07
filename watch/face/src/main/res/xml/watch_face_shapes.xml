@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Written by tools/face.py -->
+<WatchFaces>
+    <WatchFace shape="CIRCLE" width="396" height="396" file="@raw/watchface_396"/>
+    <WatchFace shape="CIRCLE" width="432" height="432" file="@raw/watchface_432"/>
+    <WatchFace shape="CIRCLE" width="438" height="438" file="@raw/watchface_438"/>
+    <WatchFace shape="CIRCLE" width="450" height="450" file="@raw/watchface"/>
+    <WatchFace shape="CIRCLE" width="480" height="480" file="@raw/watchface_480"/>
+</WatchFaces>

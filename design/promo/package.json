@@ -1,9 +1,9 @@
 {
-  "name": "claude-watch-promo",
+  "name": "wristling-promo",
   "private": true,
   "scripts": {
     "still": "remotion still src/index.ts Promo",
-    "render": "remotion render src/index.ts Promo out/claude-watch-promo.mp4"
+    "render": "remotion render src/index.ts Promo out/wristling-promo.mp4"
   },
   "dependencies": {
     "@remotion/cli": "4.0.484",

@@ -239,7 +239,7 @@ const Outro: React.FC<{frame: number}> = ({frame}) => {
       <Words text="Get it for your Galaxy Watch4 to Watch8." frame={frame} from={B(30.25)} x={0} y={322} size={60} weight={500} colour={Grey} align="center" width={1920} stagger={2} />
       {frame >= B(30.75) && (
         <div style={{position: 'absolute', left: 0, right: 0, top: 418, textAlign: 'center', opacity: clamp01((frame - B(30.75)) / 8), transform: `scale(${easeOutBack((frame - B(30.75)) / 14, 1.2)})`}}>
-          <span style={{display: 'inline-block', fontFamily: MONO, fontWeight: 700, fontSize: 56, color: '#06070C', background: COLOURS[DONE], padding: '14px 34px', borderRadius: 18}}>github.com/Mikalio/claude-watch</span>
+          <span style={{display: 'inline-block', fontFamily: MONO, fontWeight: 700, fontSize: 56, color: '#06070C', background: COLOURS[DONE], padding: '14px 34px', borderRadius: 18}}>github.com/Mikalio/wristling</span>
         </div>
       )}
       <Burst frame={frame} from={B(29.5)} x={420} y={250} colours={[COLOURS[NEEDS], WHITE]} count={18} reach={260} size={12} seed={11} life={34} />

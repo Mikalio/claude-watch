@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Claude watch: see what Claude Code is doing, on your wrist</title>
+<title>Wristling: see what Claude Code is doing, on your wrist</title>
 <meta name="description" content="A little pixel creature on your Galaxy Watch that shows whether Claude Code is working, needs you, or has handed you the turn.">
-<meta property="og:title" content="Claude watch">
+<meta property="og:title" content="Wristling">
 <meta property="og:description" content="A little pixel creature on your Galaxy Watch that shows what Claude Code is doing.">
-<meta property="og:image" content="https://mikalio.github.io/claude-watch/media/family-strip.jpg">
+<meta property="og:image" content="https://mikalio.github.io/wristling/media/family-strip.jpg">
 <meta name="theme-color" content="#08090C">
 <link rel="icon" href="face/drawable/creature_needs.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -18,12 +18,12 @@
 <body>
 <header class="nav">
   <div class="wrap nav-row">
-    <a class="brand" href="#top">Claude watch</a>
+    <a class="brand" href="#top">Wristling</a>
     <nav aria-label="Page">
       <a class="nav-link" href="#moods">Moods</a>
       <a class="nav-link" href="#film">Film</a>
       <a class="nav-link" href="#setup">Set it up</a>
-      <a class="btn btn-small" href="https://github.com/Mikalio/claude-watch">GitHub</a>
+      <a class="btn btn-small" href="https://github.com/Mikalio/wristling">GitHub</a>
     </nav>
   </div>
 </header>
@@ -35,16 +35,16 @@
         <h1>A little creature on your Galaxy Watch that shows what Claude Code is doing.</h1>
         <p class="lead">Working, needs you, your turn, or fast asleep. One look at your wrist tells you which, so you never come back to find Claude has waited 20 minutes for you to press 1.</p>
         <div class="actions">
-          <a class="btn" href="https://github.com/Mikalio/claude-watch">Get it on GitHub</a>
+          <a class="btn" href="https://github.com/Mikalio/wristling">Get it on GitHub</a>
           <a class="btn btn-quiet" href="#film">Watch the film</a>
         </div>
         <p class="fact">Open source. Runs on your own relay. For Galaxy Watch4 through Watch8.</p>
       </div>
       <div class="demo">
         <div class="watch" id="watch">
-          <noscript><img class="watch-still" src="media/working.jpg" alt="The Claude watch face showing Working"></noscript>
+          <noscript><img class="watch-still" src="media/working.jpg" alt="The Wristling face showing Working"></noscript>
           <img class="watch-body" src="media/watch.jpg" alt="" width="1080" height="1080">
-          <canvas id="face" role="img" aria-label="The real Claude watch face, running live"></canvas>
+          <canvas id="face" role="img" aria-label="The real Wristling face, running live"></canvas>
           <div class="glass" aria-hidden="true"></div>
         </div>
         <div class="controls">
@@ -82,8 +82,8 @@
     <div class="wrap">
       <h2>The whole story in 60 seconds</h2>
       <video class="film" controls preload="none" poster="media/film-poster.jpg" width="1920" height="1080">
-        <source src="media/claude-watch-promo.mp4" type="video/mp4">
-        <a href="media/claude-watch-promo.mp4">Download the film</a>
+        <source src="media/wristling-promo.mp4" type="video/mp4">
+        <a href="media/wristling-promo.mp4">Download the film</a>
       </video>
     </div>
   </section>
@@ -107,7 +107,7 @@
   <section id="setup">
     <div class="wrap">
       <h2>What it takes to set up</h2>
-      <p class="lead narrow">Your hooks, your relay, your watch. You run the small relay yourself, and each session's state, folder name and agent count go through your own Firebase project. Your prompts and code don't.</p>
+      <p class="lead narrow">Your hooks, your relay, your watch. You run the small relay yourself, and each session's state, folder name and agent count go through your own Firebase project. Your prompts and code don't. The setup script also encrypts the pushes, so only your watch can read them.</p>
       <div class="flow" role="img" aria-label="Claude Code hooks send to your relay, which pushes through Firebase to your watch">
         <div class="flow-line" aria-hidden="true"><span></span></div>
         <div class="node"><div class="node-box mono">&gt;_</div><b>Claude Code hooks</b></div>
@@ -117,12 +117,13 @@
       </div>
       <ol class="steps">
         <li><b>Firebase.</b> A free project, its config and a private topic.</li>
-        <li><b>Relay.</b> One small Docker container.</li>
-        <li><b>Hooks.</b> Paste our example into your Claude Code settings.</li>
+        <li><b>Relay.</b> On your PC, or in a small Docker container on a server.</li>
+        <li><b>Hooks.</b> A plugin for a relay on your PC, otherwise our example in your Claude Code settings.</li>
         <li><b>Build.</b> On your PC, or in a private copy on GitHub.</li>
         <li><b>Install.</b> Over adb. Then choose the face.</li>
       </ol>
-      <div class="actions"><a class="btn" href="https://github.com/Mikalio/claude-watch#set-it-up-yourself">Read the setup guide</a></div>
+      <p class="lead narrow">One command walks you through all of it: <span class="mono">python -m wristling setup</span></p>
+      <div class="actions"><a class="btn" href="https://github.com/Mikalio/wristling#set-it-up-yourself">Read the setup guide</a></div>
     </div>
   </section>
 
@@ -130,11 +131,11 @@
     <div class="wrap split">
       <div>
         <h2>Galaxy Watch4 to Watch8. Anything else? Ask Claude.</h2>
-        <p class="lead">It's made for every Galaxy Watch from 4 to 8, Classic, Pro and Ultra too, because it's all drawn for 450 px and scaled to fit. So far it has only run on a Watch4 Classic, so tell us if yours looks off. Other round Wear OS watches should be close. An Apple Watch or Garmin needs a new watch app, but the relay and hooks can stay.</p>
+        <p class="lead">It's made for every Galaxy Watch from 4 to 8, Classic, Pro and Ultra too. The face and tile are drawn for each screen's exact pixels. So far it has only run on a Watch4 Classic, so tell us if yours looks off. Other round Wear OS watches should be close. An Apple Watch or Garmin needs a new watch app, but the relay and hooks can stay.</p>
         <p class="lead">Either way, Claude can do the work. Open the repo in Claude Code and tell it what you have.</p>
       </div>
       <div class="prompt">
-        <p class="prompt-text mono" id="prompt">Adapt Claude watch to my Pixel Watch 3. Keep the relay and hooks. Change what this watch needs, and tell me what you couldn't test.</p>
+        <p class="prompt-text mono" id="prompt">Adapt Wristling to my Pixel Watch 3. Keep the relay and hooks. Change what this watch needs, and tell me what you couldn't test.</p>
         <button class="btn btn-quiet" id="copy">Copy this prompt</button>
       </div>
     </div>
@@ -142,9 +143,9 @@
 
   <section class="close">
     <div class="wrap">
-      <h2 class="wordmark">Get Claude watch</h2>
+      <h2 class="wordmark">Get Wristling</h2>
       <p class="lead">Free and open source, for Galaxy Watch4 through Watch8.</p>
-      <div class="actions center"><a class="btn" href="https://github.com/Mikalio/claude-watch">github.com/Mikalio/claude-watch</a></div>
+      <div class="actions center"><a class="btn" href="https://github.com/Mikalio/wristling">github.com/Mikalio/wristling</a></div>
     </div>
     <img class="family" src="media/family-strip.jpg" alt="The creature in each of its moods, side by side" loading="lazy" width="1920" height="345">
   </section>

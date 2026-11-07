@@ -102,7 +102,7 @@ export const camAt = (frame: number) => track[Math.max(0, Math.min(track.length 
 // The hook's timer, and the sample sessions on the Sessions screen
 export const SESSIONS = [
   {name: 'Grocery offers', state: 'needs', place: 'PC', age: '2 min'},
-  {name: 'Claude watch', state: 'working', place: '3 agents', age: '6 min'},
+  {name: 'Wristling', state: 'working', place: '3 agents', age: '6 min'},
   {name: 'Trip planner', state: 'working', place: 'PC', age: '11 min'},
   {name: 'Invoice tool', state: 'done', place: 'PC', age: '4 min'},
   {name: 'Blog redesign', state: 'done', place: 'Cloud', age: '9 min'},

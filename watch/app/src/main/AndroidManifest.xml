@@ -62,10 +62,10 @@
             <meta-data
                 android:name="android.support.wearable.complications.UPDATE_PERIOD_SECONDS"
                 android:value="600" />
-            <!-- The Claude face may use this as its default, without asking for permission first -->
+            <!-- The Wristling face may use this as its default, without asking for permission first -->
             <meta-data
                 android:name="android.support.wearable.complications.SAFE_WATCH_FACES"
-                android:value="io.github.mikalio.claudewatch.face" />
+                android:value="io.github.mikalio.wristling.face" />
         </service>
     </application>
 </manifest>

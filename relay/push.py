@@ -1,7 +1,9 @@
 """Sends what the watch shows to the watch, through Firebase Cloud Messaging."""
 
+import base64
 import json
 import logging
+import os
 import threading
 import time
 
@@ -25,10 +27,32 @@ def to_message(summary: dict, sent: float) -> dict:
     }
 
 
+def android_options(wake: bool) -> dict:
+    """A data-only message reaches the app without a notification. High priority wakes a sleeping watch,
+    which costs battery, so only a push that calls for you uses it, and it has no collapse key: Firebase
+    holds collapsible messages back past a burst of 20, refilling 1 every 3 minutes, and this one can't
+    wait. The watch ignores any push older than the one it has, so order doesn't matter.
+    The others wait until the watch wakes anyway, and a newer push replaces one that is still waiting.
+    They outlive the keepalive, so a watch that wakes always finds one."""
+    if wake:
+        return {"priority": "HIGH", "ttl": "600s"}
+    return {"priority": "NORMAL", "ttl": "1800s", "collapse_key": "state"}
+
+
+def seal(data: dict, key: str, nonce: bytes | None = None) -> dict:
+    """The push, readable only with the key the watch app was built with, not by Firebase: AES-256-GCM, in base64,
+    as a 12-byte nonce and then the ciphertext with its tag."""
+    from cryptography.hazmat.primitives.ciphers.aead import AESGCM
+
+    nonce = nonce or os.urandom(12)
+    plain = json.dumps(data, separators=(",", ":")).encode()
+    return {"sealed": base64.b64encode(nonce + AESGCM(base64.b64decode(key)).encrypt(nonce, plain, None)).decode()}
+
+
 class FcmSender:
     """Sends to a Firebase topic the watch app subscribes to, with a service account key."""
 
-    def __init__(self, key_file: str, topic: str):
+    def __init__(self, key_file: str, topic: str, push_key: str = ""):
         from google.auth.transport.requests import AuthorizedSession
         from google.oauth2 import service_account
 
@@ -36,14 +60,11 @@ class FcmSender:
         self._http = AuthorizedSession(credentials)
         self._url = f"https://fcm.googleapis.com/v1/projects/{credentials.project_id}/messages:send"
         self._topic = topic
+        self._push_key = push_key
 
     def send(self, data: dict, wake: bool) -> None:
-        # A data-only message reaches the app without a notification. High priority wakes a sleeping
-        # watch, which costs battery, so only a push that calls for you uses it. The others wait
-        # until the watch wakes anyway, and a newer push replaces one that is still waiting. They
-        # outlive the keepalive, so a watch that wakes always finds one.
-        android = {"priority": "HIGH" if wake else "NORMAL", "ttl": "600s" if wake else "1800s", "collapse_key": "state"}
-        message = {"topic": self._topic, "data": data, "android": android}
+        data = seal(data, self._push_key) if self._push_key else data
+        message = {"topic": self._topic, "data": data, "android": android_options(wake)}
         self._http.post(self._url, json={"message": message}, timeout=10).raise_for_status()
 
 

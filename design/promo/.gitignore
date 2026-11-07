@@ -3,3 +3,4 @@ out/
 public/face/
 public/audio/music.wav
 *.mp4
+package-lock.json

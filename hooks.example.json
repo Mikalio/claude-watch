@@ -1,22 +1,5 @@
 {
   "hooks": {
-    "SessionStart": [
-      {
-        "hooks": [
-          {
-            "type": "http",
-            "url": "http://YOUR-RELAY:8079/hook?where=pc",
-            "timeout": 3,
-            "headers": {
-              "Authorization": "Bearer $CLAUDE_WATCH_TOKEN"
-            },
-            "allowedEnvVars": [
-              "CLAUDE_WATCH_TOKEN"
-            ]
-          }
-        ]
-      }
-    ],
     "UserPromptSubmit": [
       {
         "hooks": [
@@ -25,10 +8,10 @@
             "url": "http://YOUR-RELAY:8079/hook?where=pc",
             "timeout": 3,
             "headers": {
-              "Authorization": "Bearer $CLAUDE_WATCH_TOKEN"
+              "Authorization": "Bearer $WRISTLING_TOKEN"
             },
             "allowedEnvVars": [
-              "CLAUDE_WATCH_TOKEN"
+              "WRISTLING_TOKEN"
             ]
           }
         ]
@@ -42,10 +25,10 @@
             "url": "http://YOUR-RELAY:8079/hook?where=pc",
             "timeout": 3,
             "headers": {
-              "Authorization": "Bearer $CLAUDE_WATCH_TOKEN"
+              "Authorization": "Bearer $WRISTLING_TOKEN"
             },
             "allowedEnvVars": [
-              "CLAUDE_WATCH_TOKEN"
+              "WRISTLING_TOKEN"
             ]
           }
         ]
@@ -59,10 +42,10 @@
             "url": "http://YOUR-RELAY:8079/hook?where=pc",
             "timeout": 3,
             "headers": {
-              "Authorization": "Bearer $CLAUDE_WATCH_TOKEN"
+              "Authorization": "Bearer $WRISTLING_TOKEN"
             },
             "allowedEnvVars": [
-              "CLAUDE_WATCH_TOKEN"
+              "WRISTLING_TOKEN"
             ]
           }
         ]
@@ -76,10 +59,10 @@
             "url": "http://YOUR-RELAY:8079/hook?where=pc",
             "timeout": 3,
             "headers": {
-              "Authorization": "Bearer $CLAUDE_WATCH_TOKEN"
+              "Authorization": "Bearer $WRISTLING_TOKEN"
             },
             "allowedEnvVars": [
-              "CLAUDE_WATCH_TOKEN"
+              "WRISTLING_TOKEN"
             ]
           }
         ]
@@ -93,10 +76,10 @@
             "url": "http://YOUR-RELAY:8079/hook?where=pc",
             "timeout": 3,
             "headers": {
-              "Authorization": "Bearer $CLAUDE_WATCH_TOKEN"
+              "Authorization": "Bearer $WRISTLING_TOKEN"
             },
             "allowedEnvVars": [
-              "CLAUDE_WATCH_TOKEN"
+              "WRISTLING_TOKEN"
             ]
           }
         ]
@@ -110,10 +93,10 @@
             "url": "http://YOUR-RELAY:8079/hook?where=pc",
             "timeout": 3,
             "headers": {
-              "Authorization": "Bearer $CLAUDE_WATCH_TOKEN"
+              "Authorization": "Bearer $WRISTLING_TOKEN"
             },
             "allowedEnvVars": [
-              "CLAUDE_WATCH_TOKEN"
+              "WRISTLING_TOKEN"
             ]
           }
         ]
@@ -127,10 +110,10 @@
             "url": "http://YOUR-RELAY:8079/hook?where=pc",
             "timeout": 3,
             "headers": {
-              "Authorization": "Bearer $CLAUDE_WATCH_TOKEN"
+              "Authorization": "Bearer $WRISTLING_TOKEN"
             },
             "allowedEnvVars": [
-              "CLAUDE_WATCH_TOKEN"
+              "WRISTLING_TOKEN"
             ]
           }
         ]
@@ -144,10 +127,10 @@
             "url": "http://YOUR-RELAY:8079/hook?where=pc",
             "timeout": 3,
             "headers": {
-              "Authorization": "Bearer $CLAUDE_WATCH_TOKEN"
+              "Authorization": "Bearer $WRISTLING_TOKEN"
             },
             "allowedEnvVars": [
-              "CLAUDE_WATCH_TOKEN"
+              "WRISTLING_TOKEN"
             ]
           }
         ]
@@ -161,10 +144,10 @@
             "url": "http://YOUR-RELAY:8079/hook?where=pc",
             "timeout": 3,
             "headers": {
-              "Authorization": "Bearer $CLAUDE_WATCH_TOKEN"
+              "Authorization": "Bearer $WRISTLING_TOKEN"
             },
             "allowedEnvVars": [
-              "CLAUDE_WATCH_TOKEN"
+              "WRISTLING_TOKEN"
             ]
           }
         ]
@@ -178,10 +161,10 @@
             "url": "http://YOUR-RELAY:8079/hook?where=pc",
             "timeout": 3,
             "headers": {
-              "Authorization": "Bearer $CLAUDE_WATCH_TOKEN"
+              "Authorization": "Bearer $WRISTLING_TOKEN"
             },
             "allowedEnvVars": [
-              "CLAUDE_WATCH_TOKEN"
+              "WRISTLING_TOKEN"
             ]
           }
         ]
@@ -195,10 +178,10 @@
             "url": "http://YOUR-RELAY:8079/hook?where=pc",
             "timeout": 3,
             "headers": {
-              "Authorization": "Bearer $CLAUDE_WATCH_TOKEN"
+              "Authorization": "Bearer $WRISTLING_TOKEN"
             },
             "allowedEnvVars": [
-              "CLAUDE_WATCH_TOKEN"
+              "WRISTLING_TOKEN"
             ]
           }
         ]
@@ -212,10 +195,10 @@
             "url": "http://YOUR-RELAY:8079/hook?where=pc",
             "timeout": 3,
             "headers": {
-              "Authorization": "Bearer $CLAUDE_WATCH_TOKEN"
+              "Authorization": "Bearer $WRISTLING_TOKEN"
             },
             "allowedEnvVars": [
-              "CLAUDE_WATCH_TOKEN"
+              "WRISTLING_TOKEN"
             ]
           }
         ]

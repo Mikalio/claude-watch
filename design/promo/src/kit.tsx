@@ -38,7 +38,7 @@ export const Words: React.FC<{
 
 /** Letters stamped down one by one: the wordmark. */
 export const Wordmark: React.FC<{frame: number; from: number; to?: number; x: number; y: number; size: number; align?: 'left' | 'center'; width?: number}> = ({frame, from, to = Infinity, x, y, size, align = 'left', width = 1000}) => {
-  const letters = 'CLAUDE WATCH'.split('');
+  const letters = 'WRISTLING'.split('');
   return (
     <div style={{position: 'absolute', left: x, top: y, width, fontFamily: PIXEL, fontSize: size, lineHeight: 1, color: WHITE, textAlign: align, whiteSpace: 'nowrap', opacity: to === Infinity ? 1 : interpolate(frame, [to - 8, to], [1, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'})}}>
       {letters.map((l, i) => {

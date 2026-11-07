@@ -1,10 +1,12 @@
+import base64
 import json
 
+import pytest
 from fastapi.testclient import TestClient
 
-from relay.push import Relay
+from relay.push import Relay, android_options, seal
 from relay.sessions import Sessions
-from relay.web import create_app
+from relay.web import create_app, push_key
 
 TOKEN = "test-token"
 AUTH = {"Authorization": f"Bearer {TOKEN}"}
@@ -162,3 +164,33 @@ def test_bad_json_is_refused():
     client, *_ = make()
     response = client.post("/hook", content=b"not json", headers={**AUTH, "Content-Type": "application/json"})
     assert response.status_code == 400
+
+
+def test_a_push_that_wakes_skips_firebases_burst_limit():
+    assert "collapse_key" not in android_options(wake=True)
+    assert android_options(wake=True)["priority"] == "HIGH"
+    quiet = android_options(wake=False)
+    assert quiet["collapse_key"] == "state" and quiet["priority"] == "NORMAL"
+
+
+# The same push and key as watch/app/src/test/.../SealedTest.kt, so the two sides can't drift apart
+PUSH_KEY = "AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8="
+SEALED = "ZGVmZ2hpamtsbW5vMzmtEhidM7wEQDGNvwEZ327gdnjkBpYR0/OWarzRyivxmzngI3T9YY+AWkIoAjoCqK5TgmdmYbAB7TD2"
+
+
+def test_a_sealed_push_is_what_the_watch_expects():
+    data = {"state": "needs", "project": "Grocery offers"}
+    assert seal(data, PUSH_KEY, nonce=bytes(range(100, 112))) == {"sealed": SEALED}
+
+
+def test_each_sealed_push_is_different_and_hides_the_names():
+    data = {"state": "needs", "project": "Grocery offers"}
+    first, second = seal(data, PUSH_KEY), seal(data, PUSH_KEY)
+    assert first != second and list(first) == ["sealed"]
+    assert b"Grocery" not in base64.b64decode(first["sealed"])
+
+
+def test_a_push_key_of_the_wrong_length_stops_the_relay(monkeypatch):
+    monkeypatch.setenv("PUSH_KEY", base64.b64encode(b"short").decode())
+    with pytest.raises(RuntimeError):
+        push_key()

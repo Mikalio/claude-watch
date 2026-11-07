@@ -3,6 +3,7 @@ watch should show and pushes it when it changes. Start it with
 uvicorn relay.web:create_app --factory."""
 
 import asyncio
+import base64
 import hmac
 import logging
 import os
@@ -16,11 +17,18 @@ from relay.sessions import Sessions
 log = logging.getLogger("relay")
 
 
+def push_key() -> str:
+    key = os.environ.get("PUSH_KEY", "")
+    if key and len(base64.b64decode(key)) != 32:
+        raise RuntimeError("PUSH_KEY must be 32 bytes in base64")
+    return key
+
+
 def make_sender():
     key_file = os.environ.get("FCM_KEY_FILE", "/data/firebase-key.json")
     topic = os.environ.get("FCM_TOPIC", "")
     if os.path.exists(key_file) and topic:
-        return FcmSender(key_file, topic)
+        return FcmSender(key_file, topic, push_key())
     log.warning("no Firebase key at %s or no FCM_TOPIC: pushes are only logged", key_file)
     return LogSender()
 

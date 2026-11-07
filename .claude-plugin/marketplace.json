@@ -1,0 +1,14 @@
+{
+  "name": "wristling",
+  "description": "Wristling: a pixel creature on your Galaxy Watch that shows what Claude Code is doing.",
+  "owner": {
+    "name": "Mikalio"
+  },
+  "plugins": [
+    {
+      "name": "wristling",
+      "source": "./plugin",
+      "description": "Reports your Claude Code sessions to the Wristling relay on this PC, which shows them on your Galaxy Watch."
+    }
+  ]
+}

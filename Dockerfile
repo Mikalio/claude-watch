@@ -1,4 +1,4 @@
-# The relay as a container: docker build -t claude-watch-relay .
+# The relay as a container: docker build -t wristling-relay .
 # /data holds the Firebase key (firebase-key.json), which the relay only reads. See README.md.
 FROM python:3.12-slim
 

@@ -1,0 +1,219 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "timeout": 10,
+            "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/scripts/start_relay.py\"; python \"${CLAUDE_PLUGIN_ROOT}/scripts/start_relay.py\"; exit 0"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "http",
+            "url": "http://127.0.0.1:8079/hook?where=pc",
+            "timeout": 3,
+            "headers": {
+              "Authorization": "Bearer $WRISTLING_TOKEN"
+            },
+            "allowedEnvVars": [
+              "WRISTLING_TOKEN"
+            ]
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "hooks": [
+          {
+            "type": "http",
+            "url": "http://127.0.0.1:8079/hook?where=pc",
+            "timeout": 3,
+            "headers": {
+              "Authorization": "Bearer $WRISTLING_TOKEN"
+            },
+            "allowedEnvVars": [
+              "WRISTLING_TOKEN"
+            ]
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "hooks": [
+          {
+            "type": "http",
+            "url": "http://127.0.0.1:8079/hook?where=pc",
+            "timeout": 3,
+            "headers": {
+              "Authorization": "Bearer $WRISTLING_TOKEN"
+            },
+            "allowedEnvVars": [
+              "WRISTLING_TOKEN"
+            ]
+          }
+        ]
+      }
+    ],
+    "PostToolUseFailure": [
+      {
+        "hooks": [
+          {
+            "type": "http",
+            "url": "http://127.0.0.1:8079/hook?where=pc",
+            "timeout": 3,
+            "headers": {
+              "Authorization": "Bearer $WRISTLING_TOKEN"
+            },
+            "allowedEnvVars": [
+              "WRISTLING_TOKEN"
+            ]
+          }
+        ]
+      }
+    ],
+    "PermissionRequest": [
+      {
+        "hooks": [
+          {
+            "type": "http",
+            "url": "http://127.0.0.1:8079/hook?where=pc",
+            "timeout": 3,
+            "headers": {
+              "Authorization": "Bearer $WRISTLING_TOKEN"
+            },
+            "allowedEnvVars": [
+              "WRISTLING_TOKEN"
+            ]
+          }
+        ]
+      }
+    ],
+    "Elicitation": [
+      {
+        "hooks": [
+          {
+            "type": "http",
+            "url": "http://127.0.0.1:8079/hook?where=pc",
+            "timeout": 3,
+            "headers": {
+              "Authorization": "Bearer $WRISTLING_TOKEN"
+            },
+            "allowedEnvVars": [
+              "WRISTLING_TOKEN"
+            ]
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "hooks": [
+          {
+            "type": "http",
+            "url": "http://127.0.0.1:8079/hook?where=pc",
+            "timeout": 3,
+            "headers": {
+              "Authorization": "Bearer $WRISTLING_TOKEN"
+            },
+            "allowedEnvVars": [
+              "WRISTLING_TOKEN"
+            ]
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "http",
+            "url": "http://127.0.0.1:8079/hook?where=pc",
+            "timeout": 3,
+            "headers": {
+              "Authorization": "Bearer $WRISTLING_TOKEN"
+            },
+            "allowedEnvVars": [
+              "WRISTLING_TOKEN"
+            ]
+          }
+        ]
+      }
+    ],
+    "StopFailure": [
+      {
+        "hooks": [
+          {
+            "type": "http",
+            "url": "http://127.0.0.1:8079/hook?where=pc",
+            "timeout": 3,
+            "headers": {
+              "Authorization": "Bearer $WRISTLING_TOKEN"
+            },
+            "allowedEnvVars": [
+              "WRISTLING_TOKEN"
+            ]
+          }
+        ]
+      }
+    ],
+    "SubagentStart": [
+      {
+        "hooks": [
+          {
+            "type": "http",
+            "url": "http://127.0.0.1:8079/hook?where=pc",
+            "timeout": 3,
+            "headers": {
+              "Authorization": "Bearer $WRISTLING_TOKEN"
+            },
+            "allowedEnvVars": [
+              "WRISTLING_TOKEN"
+            ]
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "hooks": [
+          {
+            "type": "http",
+            "url": "http://127.0.0.1:8079/hook?where=pc",
+            "timeout": 3,
+            "headers": {
+              "Authorization": "Bearer $WRISTLING_TOKEN"
+            },
+            "allowedEnvVars": [
+              "WRISTLING_TOKEN"
+            ]
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "http",
+            "url": "http://127.0.0.1:8079/hook?where=pc",
+            "timeout": 3,
+            "headers": {
+              "Authorization": "Bearer $WRISTLING_TOKEN"
+            },
+            "allowedEnvVars": [
+              "WRISTLING_TOKEN"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
