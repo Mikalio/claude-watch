@@ -29,6 +29,7 @@ class MessagingService : FirebaseMessagingService() {
         val sealed = data["sealed"] ?: return data
         return try {
             val json = JSONObject(Sealed.open(sealed, BuildConfig.PUSH_KEY))
+            Log.i("ClaudeWatch", "opened a sealed push")
             json.keys().asSequence().associateWith { json.getString(it) }
         } catch (e: Exception) {
             Log.w("ClaudeWatch", "a sealed push couldn't be opened: check PUSH_KEY on the relay and in this build", e)
