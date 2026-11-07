@@ -154,6 +154,6 @@ Run the relay's tests with `pip install -r requirements.txt`, then `python -m py
 
 ## Licence
 
-[MIT](LICENSE). The film's music is the exception, see the licence file.
+[MIT](LICENSE). The film's music is the one exception, see [NOTICE.md](NOTICE.md).
 
 An unofficial side project, not affiliated with Anthropic or Samsung. Claude is a trademark of Anthropic.
