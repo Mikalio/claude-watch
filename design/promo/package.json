@@ -1,0 +1,21 @@
+{
+  "name": "claude-watch-promo",
+  "private": true,
+  "scripts": {
+    "still": "remotion still src/index.ts Promo",
+    "render": "remotion render src/index.ts Promo out/claude-watch-promo.mp4"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.484",
+    "@remotion/google-fonts": "4.0.484",
+    "react": "19.2.7",
+    "react-dom": "19.2.7",
+    "remotion": "4.0.484",
+    "three": "0.170.0"
+  },
+  "devDependencies": {
+    "@types/react": "19.2.7",
+    "@types/three": "0.170.0",
+    "typescript": "5.9.3"
+  }
+}

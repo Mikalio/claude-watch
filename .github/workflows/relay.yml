@@ -1,0 +1,48 @@
+# The relay. On every push that touches it: run the tests, build the image, start it and send it a hook.
+name: Relay
+
+on:
+  push:
+    paths:
+      - relay/**
+      - tests/**
+      - requirements.txt
+      - Dockerfile
+      - .github/workflows/relay.yml
+  pull_request:
+    paths:
+      - relay/**
+      - tests/**
+      - requirements.txt
+      - Dockerfile
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  relay:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      - run: python -m pytest -q
+
+      - name: Build
+        run: docker build -t relay .
+
+      - name: Start it without a Firebase key and send it a hook
+        run: |
+          sudo mkdir data
+          docker run -d --name relay -p 8000:8000 -v "$PWD/data:/data" -e RELAY_TOKEN=ci-token relay
+          for i in $(seq 30); do curl -fsS -o /dev/null http://localhost:8000/health && break; sleep 1; done
+          curl -fsS -X POST -H "Authorization: Bearer ci-token" -H "Content-Type: application/json" \
+            -d '{"hook_event_name":"UserPromptSubmit","session_id":"ci","cwd":"/ci/project"}' \
+            http://localhost:8000/hook?where=cloud
+          curl -fsS -H "Authorization: Bearer ci-token" http://localhost:8000/state | grep '"state":"working"'
+          docker logs relay 2>&1 | grep "push not sent"
+          test "$(docker exec relay stat -c %u /proc/1)" = 99

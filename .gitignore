@@ -1,0 +1,10 @@
+.venv
+.pytest_cache
+__pycache__
+.gradle
+build
+local.properties
+# Firebase files stay out of Git: the app config until we decide how the build gets it, the
+# service account key always
+google-services.json
+*firebase*key*.json

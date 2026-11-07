@@ -1,0 +1,11 @@
+.venv
+.git
+.github
+.pytest_cache
+data
+design
+tests
+docs
+**/__pycache__
+*.md
+*.json

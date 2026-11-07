@@ -1,0 +1,225 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "http",
+            "url": "http://YOUR-RELAY:8079/hook?where=pc",
+            "timeout": 3,
+            "headers": {
+              "Authorization": "Bearer $CLAUDE_WATCH_TOKEN"
+            },
+            "allowedEnvVars": [
+              "CLAUDE_WATCH_TOKEN"
+            ]
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "http",
+            "url": "http://YOUR-RELAY:8079/hook?where=pc",
+            "timeout": 3,
+            "headers": {
+              "Authorization": "Bearer $CLAUDE_WATCH_TOKEN"
+            },
+            "allowedEnvVars": [
+              "CLAUDE_WATCH_TOKEN"
+            ]
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "hooks": [
+          {
+            "type": "http",
+            "url": "http://YOUR-RELAY:8079/hook?where=pc",
+            "timeout": 3,
+            "headers": {
+              "Authorization": "Bearer $CLAUDE_WATCH_TOKEN"
+            },
+            "allowedEnvVars": [
+              "CLAUDE_WATCH_TOKEN"
+            ]
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "hooks": [
+          {
+            "type": "http",
+            "url": "http://YOUR-RELAY:8079/hook?where=pc",
+            "timeout": 3,
+            "headers": {
+              "Authorization": "Bearer $CLAUDE_WATCH_TOKEN"
+            },
+            "allowedEnvVars": [
+              "CLAUDE_WATCH_TOKEN"
+            ]
+          }
+        ]
+      }
+    ],
+    "PostToolUseFailure": [
+      {
+        "hooks": [
+          {
+            "type": "http",
+            "url": "http://YOUR-RELAY:8079/hook?where=pc",
+            "timeout": 3,
+            "headers": {
+              "Authorization": "Bearer $CLAUDE_WATCH_TOKEN"
+            },
+            "allowedEnvVars": [
+              "CLAUDE_WATCH_TOKEN"
+            ]
+          }
+        ]
+      }
+    ],
+    "PermissionRequest": [
+      {
+        "hooks": [
+          {
+            "type": "http",
+            "url": "http://YOUR-RELAY:8079/hook?where=pc",
+            "timeout": 3,
+            "headers": {
+              "Authorization": "Bearer $CLAUDE_WATCH_TOKEN"
+            },
+            "allowedEnvVars": [
+              "CLAUDE_WATCH_TOKEN"
+            ]
+          }
+        ]
+      }
+    ],
+    "Elicitation": [
+      {
+        "hooks": [
+          {
+            "type": "http",
+            "url": "http://YOUR-RELAY:8079/hook?where=pc",
+            "timeout": 3,
+            "headers": {
+              "Authorization": "Bearer $CLAUDE_WATCH_TOKEN"
+            },
+            "allowedEnvVars": [
+              "CLAUDE_WATCH_TOKEN"
+            ]
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "hooks": [
+          {
+            "type": "http",
+            "url": "http://YOUR-RELAY:8079/hook?where=pc",
+            "timeout": 3,
+            "headers": {
+              "Authorization": "Bearer $CLAUDE_WATCH_TOKEN"
+            },
+            "allowedEnvVars": [
+              "CLAUDE_WATCH_TOKEN"
+            ]
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "http",
+            "url": "http://YOUR-RELAY:8079/hook?where=pc",
+            "timeout": 3,
+            "headers": {
+              "Authorization": "Bearer $CLAUDE_WATCH_TOKEN"
+            },
+            "allowedEnvVars": [
+              "CLAUDE_WATCH_TOKEN"
+            ]
+          }
+        ]
+      }
+    ],
+    "StopFailure": [
+      {
+        "hooks": [
+          {
+            "type": "http",
+            "url": "http://YOUR-RELAY:8079/hook?where=pc",
+            "timeout": 3,
+            "headers": {
+              "Authorization": "Bearer $CLAUDE_WATCH_TOKEN"
+            },
+            "allowedEnvVars": [
+              "CLAUDE_WATCH_TOKEN"
+            ]
+          }
+        ]
+      }
+    ],
+    "SubagentStart": [
+      {
+        "hooks": [
+          {
+            "type": "http",
+            "url": "http://YOUR-RELAY:8079/hook?where=pc",
+            "timeout": 3,
+            "headers": {
+              "Authorization": "Bearer $CLAUDE_WATCH_TOKEN"
+            },
+            "allowedEnvVars": [
+              "CLAUDE_WATCH_TOKEN"
+            ]
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "hooks": [
+          {
+            "type": "http",
+            "url": "http://YOUR-RELAY:8079/hook?where=pc",
+            "timeout": 3,
+            "headers": {
+              "Authorization": "Bearer $CLAUDE_WATCH_TOKEN"
+            },
+            "allowedEnvVars": [
+              "CLAUDE_WATCH_TOKEN"
+            ]
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "http",
+            "url": "http://YOUR-RELAY:8079/hook?where=pc",
+            "timeout": 3,
+            "headers": {
+              "Authorization": "Bearer $CLAUDE_WATCH_TOKEN"
+            },
+            "allowedEnvVars": [
+              "CLAUDE_WATCH_TOKEN"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

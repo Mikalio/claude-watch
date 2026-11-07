@@ -1,0 +1,7 @@
+<!-- Drawn by tools/sprites.py; change the pixel maps there, not here. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="20dp" android:height="25dp"
+    android:viewportWidth="8" android:viewportHeight="10">
+    <path android:fillColor="#AEB4BE" android:pathData="M0,1h8v1h-8zM0,8h8v1h-8zM1,2h1v1h-1zM6,2h1v1h-1zM2,3h1v1h-1zM5,3h1v1h-1zM3,4h2v2h-2zM2,6h1v1h-1zM5,6h1v1h-1zM1,7h1v1h-1zM6,7h1v1h-1z" />
+    <path android:fillColor="#7C828D" android:pathData="M2,2h4v1h-4zM3,3h2v1h-2z" />
+</vector>
